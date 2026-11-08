@@ -293,8 +293,11 @@ function App() {
   }
 
   async function verifyTransaction(sharedHash = "") {
-    const hash = (sharedHash || verificationHash).trim();
-    setVerificationResult(null);
+    const hashInput =
+  typeof sharedHash === "string" ? sharedHash : verificationHash;
+
+const hash = hashInput.trim();
+setVerificationResult(null);
     if (!/^0x[0-9a-fA-F]{64}$/.test(hash)) {
       setVerificationResult({ ok: false, title: "Invalid transaction hash", detail: "Paste the complete 66-character transaction hash beginning with 0x." });
       return;
@@ -717,7 +720,17 @@ function App() {
                 <h3><ShieldCheck size={19}/> Verify Donation</h3>
                 <p>Use the transaction hash to locate its confirmed record in the loaded blockchain history.</p>
                 <input className="verify-input" value={verificationHash} onChange={e => { setVerificationHash(e.target.value); setVerificationResult(null); }} placeholder="Paste donation transaction hash (0x...)" />
-                <button className="primary-btn" onClick={verifyTransaction} disabled={transactionsLoading || !verificationHash.trim()}><ShieldCheck size={16}/> {transactionsLoading ? "VERIFYING..." : "VERIFY TRANSACTION"}</button>
+                
+  <button
+  type="button"
+  className="primary-btn"
+  onClick={() => verifyTransaction()}
+  disabled={transactionsLoading || !verificationHash.trim()}
+>
+  <ShieldCheck size={16} />
+  VERIFY TRANSACTION
+</button>
+
                 {new URLSearchParams(location.search).get("certificate") && <div className="certificate-id-banner">CERTIFICATE ID · {new URLSearchParams(location.search).get("certificate")}</div>}
                 {verificationResult && <div className={`verification-result ${verificationResult.ok ? "verified" : "not-verified"}`}><strong>{verificationResult.ok ? "✓ " : "! "}{verificationResult.title}</strong><p>{verificationResult.detail}</p>{verificationResult.ok && <><small>Donor: {verificationResult.donor}</small><small>Block: {verificationResult.blockNumber} · {verificationResult.date}</small><small className="verification-hash">{verificationResult.hash}</small></>}</div>}
               </div>
