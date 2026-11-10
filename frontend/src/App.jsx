@@ -51,6 +51,22 @@ function App() {
     } catch { setMessage("Clipboard access was blocked by the browser. Select and copy the hash manually."); }
   }
 
+  function disconnectWallet() {
+    // Disconnect this website's active wallet session. MetaMask permissions remain unchanged.
+    setContract(null);
+    setAccount("");
+    setCampaigns([]);
+    setTransactions([]);
+    setTopDonors([]);
+    setVerificationHash("");
+    setVerificationResult(null);
+    setNetworkLabel("DISCONNECTED");
+    setNetworkConnected(false);
+    setSelectedCampaign(null);
+    setSelectedTransaction(null);
+    setMessage("Wallet disconnected from CharityChain.");
+  }
+
   async function connectWallet() {
     try {
       setMessage("Connecting wallet...");
@@ -294,7 +310,9 @@ function App() {
 
   async function verifyTransaction(sharedHash = "") {
     const hashInput =
-  typeof sharedHash === "string" ? sharedHash : verificationHash;
+  typeof sharedHash === "string" && sharedHash.trim()
+    ? sharedHash
+    : verificationHash;
 
 const hash = hashInput.trim();
 setVerificationResult(null);
@@ -456,7 +474,7 @@ setVerificationResult(null);
         <header className="topbar">
           <button className="mobile-menu-btn" onClick={() => setMobileMenu(!mobileMenu)} aria-label="Toggle navigation">{mobileMenu ? <X /> : <Menu />}</button>
           <div className="topbar-context"><span className="topbar-kicker">BLOCKCHAIN CHARITY ECOSYSTEM</span><span className="topbar-title">Transparent giving. Real impact.</span></div>
-          <div className="topbar-actions"><span className={`network-pill ${networkConnected ? "network-pill-connected" : "network-pill-disconnected"}`}><i className="online-dot" /> {networkConnected ? networkLabel : "NETWORK DISCONNECTED"}</span><button className="connect-btn" onClick={connectWallet} disabled={loading}><Wallet size={17} />{account ? `${account.slice(0, 6)}...${account.slice(-4)}` : "Connect Wallet"}</button></div>
+          <div className="topbar-actions"><span className={`network-pill ${networkConnected ? "network-pill-connected" : "network-pill-disconnected"}`}><i className="online-dot" /> {networkConnected ? networkLabel : "NETWORK DISCONNECTED"}</span><button className="connect-btn" onClick={connectWallet} disabled={loading}><Wallet size={17} />{account ? `${account.slice(0, 6)}...${account.slice(-4)}` : "Connect Wallet"}</button>{account && <button type="button" className="secondary-btn" onClick={disconnectWallet} disabled={loading} title="Disconnect wallet from this website">Disconnect</button>}</div>
         </header>
 
         <div className="page-content">
