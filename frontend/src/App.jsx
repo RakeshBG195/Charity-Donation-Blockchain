@@ -783,4 +783,10 @@ setVerificationResult(null);
   );
 }
 
-export default function CharityChainRouter() { return <BrowserRouter><App /></BrowserRouter>; }
+export default function CharityChainRouter() {
+  return (
+    <BrowserRouter basename="/Charity-Donation-Blockchain">
+      <App />
+    </BrowserRouter>
+  );
+}
