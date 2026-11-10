@@ -785,7 +785,7 @@ setVerificationResult(null);
 
 export default function CharityChainRouter() {
   return (
-    <BrowserRouter basename="/Charity-Donation-Blockchain">
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <App />
     </BrowserRouter>
   );

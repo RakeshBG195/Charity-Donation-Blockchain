@@ -4,5 +4,7 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/Charity-Donation-Blockchain/',
+  base: process.env.GITHUB_PAGES === 'true'
+    ? '/Charity-Donation-Blockchain/'
+    : '/',
 })

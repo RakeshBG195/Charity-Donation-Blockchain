@@ -33,10 +33,11 @@ jobs:
         working-directory: frontend
         run: npm ci
 
-      - name: Build
-        working-directory: frontend
-        run: npm run build
-
+      - - name: Build
+  working-directory: frontend
+  env:
+    GITHUB_PAGES: 'true'
+  run: npm run build
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
